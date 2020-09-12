@@ -5,6 +5,7 @@ import UserContext from './UserContext'
 import MainHeader from './Components/MainHeader'
 import MessageInput from './Components/MessageInput'
 import Dialog from './Components/Dialog'
+import Main from './Components/Main'
 import { mainUser , messages, Message } from './Data'
 
 
@@ -15,6 +16,7 @@ function App() {
   const [message, setMessage] = useState('')
   const [search, setSearch] = useState('')
   const [filteredContacts, setFilterContacts] = useState([])
+  const [darktheme, setDarkTheme] = useState(false)
 
   //TO DO CREATE ICON WHEN MESSAGE IS TYPING
   //useEffect(() => {
@@ -67,13 +69,19 @@ function App() {
                  setSearch={setSearch}
                  filteredContacts={filteredContacts}
                  setContactSelected={setContactSelected}/>
-         <main>
-            <MainHeader contactSelected={contactSelected} />
+          { contactSelected.id ? (       
+         <main className={darktheme== true ? 'dark' : 'light'}>
+            <MainHeader contactSelected={contactSelected}
+                        darktheme={darktheme}
+                        setDarkTheme={setDarkTheme}/>
             <Dialog messages={currentMessages}/>
             <MessageInput message={message}
                           setMessage={setMessage}
                           pushMessage={pushMessage}/>
-        </main> 
+        </main>
+          ) : (
+            <Main/>
+          )}
         </div>  
     )
 }

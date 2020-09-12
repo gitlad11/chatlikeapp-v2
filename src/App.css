@@ -20,12 +20,17 @@ aside {
 main {
     width: 70%;
     background: #e5ddd5;
-    background-color: #C0C0C0;
     display: flex;
     flex-direction: column;
     background-size: contain;
+    transition: 0.6s ease;
 }
-
+main.light{
+    background-image: url('./Components/Images/chatbg.jpg');
+}
+main.dark{
+    background-image: url('./Components/Images/chatbgdark.jpg')
+}
 .chats {
     flex: 1;
     padding: 0 2rem;
@@ -75,7 +80,7 @@ main header,
 aside header {
     background: #FFFAFA;
     height: 3rem;
-    display: fle1x;
+    display: flex;
     justify-content: space-between;
     align-items: center;
 }
@@ -188,10 +193,10 @@ input:focus {
     border: solid;
     border-width: 0px 16px 16px 0px;
     border-color: transparent;
-    border-right-color: #fff;
+    border-right-color: #B0E0E6;
 }
 .message.received {
-    background: #fff;
+    background: #B0E0E6;
     border-radius: 0px 5px 5px 5px;
     float: left;
 }
@@ -209,7 +214,7 @@ input:focus {
     float: right;
 }
 
-.welcome {
+.Main {
     background: #f8f9fa;
     flex: 1;
     display: flex;
@@ -217,11 +222,11 @@ input:focus {
     align-items: center;
     flex-direction: column;
 }
-.welcome h2 {
+.Main h2 {
     margin-top: 2rem;
     font-weight: normal;
 }
-.welcome img {
+.Main img {
     width: 300px;
 }
 
@@ -272,4 +277,32 @@ input:focus {
 }
 button{
     cursor: pointer;
+}
+.theme-btn{
+    margin-left: 5px;
+    height: 22px;
+    width: 22px;
+    border: 1px solid lightgrey;
+    border-radius: 60%;
+    background-image: url('./Components/Images/icons8-light-24.png');
+    background-size: 100% 100%;
+}
+.emoji-box{
+    display: none;
+    justify-content: space-around;
+    overflow-y:scroll;
+    position: absolute;
+    background-color: #fff;
+    min-height: 40px;
+    max-height: 200px;
+    width: 160px;
+    bottom: 5%;
+    left: 50%;
+    padding: 4px;
+    -webkit-box-shadow: 3px 3px 12px 0px rgba(50, 53, 50, 0.53);
+-moz-box-shadow:    3px 3px 12px 0px rgba(50, 53, 50, 0.53);
+box-shadow:         3px 3px 12px 0px rgba(50, 53, 50, 0.53);
+}
+.emoji-box.active{
+    display: block!important;
 }

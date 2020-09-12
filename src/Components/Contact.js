@@ -10,7 +10,7 @@ function Contact(props){
 	const lastTime = Math.max(...messages.map((message) => message.date.getTime()))
 	const lastMessage = messages.find((message) => message.date.getTime() === lastTime)
 
-	const toMax = (message,length) => {
+	const minimize = (message,length) => {
 		return message.length > length ? 
 				`${message.substring(0, length)} ...` 
 				: message
@@ -29,7 +29,7 @@ function Contact(props){
                             </div>
                             <div className="last-msg">
                                 <img src={CheckIcon} alt="check" className="icon-small" />
-                                <span className="text">{toMax(lastMessage.msg, 45)}</span>
+                                <span className="text">{minimize(lastMessage.msg, 40)}</span>
                             </div>
                         </div>
                     </div>
