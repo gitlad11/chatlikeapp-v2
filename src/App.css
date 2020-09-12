@@ -126,6 +126,7 @@ main header {
     align-items: flex-end;
 }
 .chat-input-box {
+    position: relative;
     display: flex;
     height: 3.5rem;
     align-items: center;
@@ -296,8 +297,8 @@ button{
     min-height: 40px;
     max-height: 200px;
     width: 160px;
-    bottom: 5%;
-    left: 50%;
+    bottom: 50px;
+    left: 5%;
     padding: 4px;
     -webkit-box-shadow: 3px 3px 12px 0px rgba(50, 53, 50, 0.53);
 -moz-box-shadow:    3px 3px 12px 0px rgba(50, 53, 50, 0.53);
@@ -305,4 +306,7 @@ box-shadow:         3px 3px 12px 0px rgba(50, 53, 50, 0.53);
 }
 .emoji-box.active{
     display: block!important;
+}
+.Twemoji{
+
 }

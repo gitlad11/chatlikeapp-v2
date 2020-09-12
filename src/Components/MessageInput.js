@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import EmojiIcon from './Images/icons8-emoji-48.png'
 import SendButton from './SendButton'
 import { Twemoji } from "react-emoji-render"
-
+import Emojis from './Emojis'
 function MessageInput(props){
 	const message = props.message
   const setMessage = props.setMessage
@@ -24,14 +24,17 @@ function MessageInput(props){
       setOpenEmoji(false)
     } else setOpenEmoji(true)
   }
-
+  const onEmoji = (event) => {
+    setMessage(message + event.target.alt)
+  }
 	return (
 		  <div className="chat-input-box">
                 <div className={`emoji-box ${openEmoji ? 'active' : ''} `}>
-                  <Twemoji text=':+1:'/>
-                  <Twemoji text=':+1:'/>
-                  <Twemoji text=':+1:'/>
-
+                  {Emojis.map((emoji) => (
+                    <button value={emoji} key={emoji} onClick={onEmoji}>
+                      <Twemoji className='Twemoji' text={emoji} />
+                    </button>
+                    ))}
                 </div>
                 <div className="icon emoji-selector">
                     	<button onClick={showEmoji}

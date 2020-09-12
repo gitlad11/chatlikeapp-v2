@@ -9,8 +9,7 @@ function Message(props){
 
 	return (
 		  <div className={`message ${message.isMainUser ? 'sent': 'received'}`}>
-                        { message.msg.includes(':+1:') ? (    
-                        <Twemoji text=':+1:'/>) : (message.msg)}
+                        <Twemoji text={message.msg}/>
                     <div className="metadata">
                         <span className="date">{message.date.toLocaleString()}</span>
                         { message.isMainUser && <img src={CheckIcon} className='icon-small'/>}
