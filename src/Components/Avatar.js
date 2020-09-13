@@ -3,7 +3,7 @@ import UserAvatar from './Images/icons8-male-user.png'
 
 function Avatar(props){
 	const contact = props.contact
-	if(!contact.avatar || contact == null){
+	if(!contact.avatar){
 	return (
 		<div className="avatar-component">
             <img src={UserAvatar} className="avatar" alt="friend"/>

@@ -7,7 +7,8 @@ import MessageInput from './Components/MessageInput'
 import Dialog from './Components/Dialog'
 import Main from './Components/Main'
 import { mainUser , messages, Message } from './Data'
-
+import {Switch, Route } from 'react-router-dom'
+import Login from './Login'
 
 function App() {  
   const [data , setData] = useState(messages)
@@ -61,7 +62,8 @@ function App() {
             //}
   //const messages = [{"id": "12", "from" : "8798776311" , "to" : "1837264832", "text" : "Hey yo" , "seen" : false},
                     //{ "id" : "14", "from" : "1837264832" , "to" : "8798776311", "text" : "fck yo", "seen" : false},
-                    //{ "id" : "16", "from" : "87058651253", "to" : "8798776311", "text" : "Call me", "seen" : true}]          
+                    //{ "id" : "16", "from" : "87058651253", "to" : "8798776311", "text" : "Call me", "seen" : true}]
+    if(data){                          
     return (
         <div className="app">
         <Sidebar user={mainUser} 
@@ -83,7 +85,15 @@ function App() {
             <Main/>
           )}
         </div>  
-    )
+    )} else {
+      return (
+      <div className='app'>
+        <Switch>
+        <Route exact path='/login' component={Login}/>
+
+        </Switch>
+      </div>
+    )}
 }
 
 export default App;

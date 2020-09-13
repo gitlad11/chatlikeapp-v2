@@ -13,13 +13,14 @@ export class Message {
         this.id = faker.random.uuid()
         this.msg = msg || faker.lorem.words(faker.helpers.randomize([...Array(20).keys()]))
         this.isMainUser = isMainUser
+        this.seen =  faker.random.boolean()
         this.date = date || faker.date.recent()
     }
 }
 
 export const mainUser = new User()
 
-export const contacts = [...Array(15).keys()].map(() => new User())
+export const contacts = [...Array(200).keys()].map(() => new User())
 
 export const messages = contacts.map((contact) => {
     return {

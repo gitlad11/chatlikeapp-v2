@@ -206,11 +206,11 @@ input:focus {
     right: -28px;
     border-width: 0px 16px 16px 16px;
     border-color: transparent;
-    border-left-color: #e1ffc7;
+    border-left-color: #b88dfc;
 }
 
 .message.sent {
-    background: #e1ffc7;
+    background: #b88dfc;
     border-radius: 5px 0px 5px 5px;
     float: right;
 }

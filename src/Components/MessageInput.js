@@ -3,6 +3,7 @@ import EmojiIcon from './Images/icons8-emoji-48.png'
 import SendButton from './SendButton'
 import { Twemoji } from "react-emoji-render"
 import Emojis from './Emojis'
+
 function MessageInput(props){
 	const message = props.message
   const setMessage = props.setMessage
@@ -25,7 +26,7 @@ function MessageInput(props){
     } else setOpenEmoji(true)
   }
   const onEmoji = (event) => {
-    setMessage(message + event.target.alt)
+    setMessage(message + `${event.target.alt}`)
   }
 	return (
 		  <div className="chat-input-box">

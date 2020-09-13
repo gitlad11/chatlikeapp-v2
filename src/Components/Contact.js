@@ -1,6 +1,6 @@
 import React from 'react'
 import Avatar from './Avatar'
-import CheckIcon from './Images/icons8-checkmark.svg'
+import CheckIcon from './Images/icons8-double-24.png'
 import NCheckIcon from './Images/icons8-checkmarkblue.svg'
 
 function Contact(props){
@@ -28,7 +28,11 @@ function Contact(props){
                                 <span className="time-mark">{lastMessage.date.toLocaleDateString()}</span>
                             </div>
                             <div className="last-msg">
+                            	{ lastMessage.seen == true ? (
                                 <img src={CheckIcon} alt="check" className="icon-small" />
+                            	) : (
+                            	<img src={NCheckIcon} alt="check" className="icon-small" />
+                            	)}
                                 <span className="text">{minimize(lastMessage.msg, 40)}</span>
                             </div>
                         </div>
