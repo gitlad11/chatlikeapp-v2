@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
 
 
 class LoginForm extends React.Component{
@@ -23,29 +24,43 @@ class LoginForm extends React.Component{
 						fullWidth 
 						maxWidth='sm'>
 
-						<AppBar position="static">
+						<AppBar color='default' position="static">
 							<Toolbar>
-								<Typography variant='h4'>Login</Typography>
-								<Button color="inherit">Registration</Button>
+								<Typography style={{ margin : 'auto' }}
+											variant='h4'>Login</Typography>
 							</Toolbar>
 						</AppBar>
-
-					<TextField  placeholder="User name"
+					<br/>	
+					<TextField  
+								placeholder="User name"
 								label="User name"
 								margin="normal"
 
 								onChange={nameChange}
 								value={name}/>
 					<br />
-					<TextField  placeholder="Phone number"
+					<TextField 
+								placeholder="Phone number"
 								label= "Phone number"
 								margin="normal"
 
 								onChange={numberChange}
 								value={number}/>
+					<br/>			
 					<Button variant="contained"
 							color="primary"
-							onClick={this.next}>Next</Button>			
+							onClick={this.next}>Next</Button>
+					<br/>				
+					<Typography variant='h6' 
+								style={{ margin: 'auto' }}>don't have account yet?</Typography>
+
+					<Link style={{ textDecoration : 'none', margin : "auto"}}
+						  to='/registration'>
+					<Button variant="outlined" 
+							color="primary"
+							style={{ width : "200px" }}>Registration</Button>
+							</Link>
+					<br/>						
 				</Dialog>
 			</ThemeProvider>
 			)

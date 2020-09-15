@@ -6,19 +6,23 @@ import MainHeader from './Components/MainHeader'
 import MessageInput from './Components/MessageInput'
 import Dialog from './Components/Dialog'
 import Main from './Components/Main'
-import { mainUser , messages, Message } from './Data'
+//import { mainUser , messages, Message } from './Data'
 import {Switch, Route } from 'react-router-dom'
 import Login from './Login'
+import Register from './Register'
+import { Redirect } from 'react-router-dom'
 
-function App() {  
-  const [data , setData] = useState(messages)
+
+function App(props) {  
+  const contacts = props.mainUser.friends
+  const [data , setData] = useState(contacts)
   const [contactSelected, setContactSelected] = useState({})
   const [currentMessages , setCurrentMessages] = useState([])
   const [message, setMessage] = useState('')
   const [search, setSearch] = useState('')
   const [filteredContacts, setFilterContacts] = useState([])
   const [darktheme, setDarkTheme] = useState(false)
-
+  console.log(data)
   //TO DO CREATE ICON WHEN MESSAGE IS TYPING
   //useEffect(() => {
     //console.log(message)
@@ -32,17 +36,21 @@ function App() {
   }, [contactSelected, data, search])
 
   //creating new message
+  //function pushMessage(){
+    //const index = data.findIndex((d) => d.contact.id === contactSelected.id)
+    //const newData = Object.assign([], data, {
+      //[index]:{
+        //contact: contactSelected,
+        //messages: [...data[index].messages, new Message(true, message, new Date())]
+      //}
+    //})
+
+    //setData(newData)
+    //setMessage('')
+  //}
+
   function pushMessage(){
     const index = data.findIndex((d) => d.contact.id === contactSelected.id)
-    const newData = Object.assign([], data, {
-      [index]:{
-        contact: contactSelected,
-        messages: [...data[index].messages, new Message(true, message, new Date())]
-      }
-    })
-
-    setData(newData)
-    setMessage('')
   }
   //comparing data and search state
   function filterContacts(data, search){
@@ -63,7 +71,7 @@ function App() {
   //const messages = [{"id": "12", "from" : "8798776311" , "to" : "1837264832", "text" : "Hey yo" , "seen" : false},
                     //{ "id" : "14", "from" : "1837264832" , "to" : "8798776311", "text" : "fck yo", "seen" : false},
                     //{ "id" : "16", "from" : "87058651253", "to" : "8798776311", "text" : "Call me", "seen" : true}]
-    if(data){                          
+    if(!data == null){                          
     return (
         <div className="app">
         <Sidebar user={mainUser} 
@@ -88,9 +96,10 @@ function App() {
     )} else {
       return (
       <div className='app'>
+         <Redirect to='login/'/>
         <Switch>
         <Route exact path='/login' component={Login}/>
-
+        <Route exact path='/registration' component ={Register}/>
         </Switch>
       </div>
     )}

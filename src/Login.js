@@ -1,20 +1,34 @@
 import React, { useState } from 'react'
 import LoginForm from './Components/LoginForm'
 import NextForm from './Components/NextForm'
+import axios from 'axios'
 
 function Login(){
 	const [step, setStep] = useState(1)
 	const [name, setName] = useState('')
 	const [number, setNumber] = useState('')
+	const [error , setError] = useState(false)
+	const [message, setMessage] = useState('')
 
-	const nextStep = () => {
+	const nextStep = () =>{
 		setStep(step + 1)
 	}
-	const prevStep = () => {
+	const prevStep = () =>{
 		setStep(step - 1)
 	}
-	const submit = () => {
-		console.log('you are in!')
+	const submit = (event) =>{
+		event.preventDefault()
+		const data = { 'name' : name, 'number' : number }
+		const res = axios.post('http://localhost:3004/login', 
+			data, { headers : {"Content-Type" : "application/json"}
+		}).then((response) => { 
+			setError(response.data.error)
+			setMessage(response.data.message)
+			if(response.data.success && response.data.token){
+				console.log(response.data)
+				localStorage.setItem("auth-token", response.data.token)
+			} 
+		})
 	}
 	const nameChange = (event) =>{
 		setName(event.target.value)
@@ -37,6 +51,8 @@ function Login(){
 	return (
 
 			<NextForm prevStep={prevStep}
+						error={error}
+						message={message}
 						submit={submit}/>
 
 		)

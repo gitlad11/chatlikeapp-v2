@@ -7,7 +7,7 @@ var contactSchema = new Schema({
 		type : String, require: false, maxLength: 40
 	},
 	number : {
-		type : String, require: true
+		type : String, require: true, minLength : 6
 	},
 	avatar : {
 		type : String
@@ -15,9 +15,7 @@ var contactSchema = new Schema({
 	online : { 
 		type : Boolean, default:false
 	},
-	friends : [{
-			id : {type : String}, messages : [] 
-		}]
+	friends : []
 })
 
 module.exports = mongoose.model('Contact', contactSchema)

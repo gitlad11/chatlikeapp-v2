@@ -4,10 +4,25 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from 'react-router-dom';
+import Axios from 'axios'
+
+const Authentication = async () =>{
+	var token = localStorage.getItem("auth-token")
+	if(token == null){
+		localStorage.setItem("auth-token", "")
+		token = ""
+	}
+	const User = await Axios.post('http://localhost:3004/authenticate',
+		null,{
+			headers : { "x-auth-token" : token }
+		}
+	)
+	return User
+}
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <App mainUser={Authentication()}/>
    </BrowserRouter>,
   document.getElementById('root')
 );

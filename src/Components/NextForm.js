@@ -5,6 +5,9 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
 
 class NextForm extends React.Component{
 
@@ -12,8 +15,10 @@ class NextForm extends React.Component{
 		event.preventDefault()
 		this.props.prevStep()
 	}
-	render(){
 
+	render(){
+		const error = this.props.error
+		const message = this.props.message
 		return(
 			<ThemeProvider>
 				<Dialog open
@@ -28,6 +33,14 @@ class NextForm extends React.Component{
 							variant="contained"
 							onClick={this.back}>I am robot</Button>
 
+				<Snackbar open={error}
+							  autoHideDuration={6000}>
+							  <MuiAlert elevation={6}
+							  			variant="filled" 
+							  			severity="error">
+                              	{message}
+        					  </MuiAlert>
+				</Snackbar>
 				</Dialog>
 			</ThemeProvider>
 			)
