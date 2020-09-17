@@ -10,23 +10,46 @@ import Main from './Components/Main'
 import {Switch, Route } from 'react-router-dom'
 import Login from './Login'
 import Register from './Register'
-import { Redirect } from 'react-router-dom'
+//import { Redirect } from 'react-router-dom'
+import axios from 'axios'
+import history from './history'
 
 
-function App(props) {  
-  const contacts = props.mainUser.friends
-  const [data , setData] = useState(contacts)
+
+function App() {  
+  
+  const [data , setData] = useState([])
+  const [mainUser, setMainUser ] = useState()
   const [contactSelected, setContactSelected] = useState({})
   const [currentMessages , setCurrentMessages] = useState([])
   const [message, setMessage] = useState('')
   const [search, setSearch] = useState('')
   const [filteredContacts, setFilterContacts] = useState([])
   const [darktheme, setDarkTheme] = useState(false)
-  console.log(data)
+
   //TO DO CREATE ICON WHEN MESSAGE IS TYPING
   //useEffect(() => {
     //console.log(message)
   //}, [message, setMessage])
+
+useEffect(() => {
+   async function fetch(){
+    const token = localStorage.getItem("auth-token")
+    if(token === null){
+      localStorage.setItem("auth-token", "")
+      token = ""
+    }
+    const tokenValid = await axios.post('http://localhost:3004/authenticate',
+            null, { headers : 
+              { "x-auth-token" : token } 
+            })
+            await setMainUser(tokenValid.data.user)
+            await setData(tokenValid.data.user.friends || [])
+    }
+    fetch()        
+  }, [])
+
+  console.log(data)
 
   //each time contactSelected, data, search is changing
   useEffect(() => {
@@ -49,9 +72,12 @@ function App(props) {
     //setMessage('')
   //}
 
-  function pushMessage(){
+  async function pushMessage(){
     const index = data.findIndex((d) => d.contact.id === contactSelected.id)
+    const message = {from : mainUser.id , to : index, message : message }
+    await axios.post('http://localhost:3004/messages/', message)
   }
+
   //comparing data and search state
   function filterContacts(data, search){
     const result = data.filter(({ contact }) => {
@@ -61,17 +87,7 @@ function App(props) {
     setFilterContacts(result)
   }
   
-  //const user = { "id" : "1" ,
-              //"number" : "87058651253",
-              //"avatar" : "",
-              //"friends" : [{'id' : "2", "number" : "8798776311" ,"messages" : [{"id" : "12"}]
-                                    //},
-                           //{"id" : "3", "number" : "1837264832"}, "messages" : []]
-            //}
-  //const messages = [{"id": "12", "from" : "8798776311" , "to" : "1837264832", "text" : "Hey yo" , "seen" : false},
-                    //{ "id" : "14", "from" : "1837264832" , "to" : "8798776311", "text" : "fck yo", "seen" : false},
-                    //{ "id" : "16", "from" : "87058651253", "to" : "8798776311", "text" : "Call me", "seen" : true}]
-    if(!data == null){                          
+    if(mainUser || mainUser !== undefined){                          
     return (
         <div className="app">
         <Sidebar user={mainUser} 
@@ -90,19 +106,47 @@ function App(props) {
                           pushMessage={pushMessage}/>
         </main>
           ) : (
-            <Main/>
+            <Main 
+                  user={mainUser}
+                  setContactSelected={setContactSelected}
+                  />
           )}
         </div>  
     )} else {
+        history.push('/login')
       return (
       <div className='app'>
-         <Redirect to='login/'/>
         <Switch>
-        <Route exact path='/login' component={Login}/>
-        <Route exact path='/registration' component ={Register}/>
+        <Route  path='/login' component={Login}/>
+        <Route  path='/registration' component ={Register}/>
         </Switch>
       </div>
     )}
 }
 
 export default App;
+
+//////////////socket////////////////////////
+//const token = localStorage.getItem("auth-token")
+  //const socket = io.connect('http://localhost:3004',{
+    //query : 'token =' + token
+  //})
+
+ //socket.on('toClient' , (contact) =>{
+       // setMainUser(contact)
+       // setData(contact.friends)
+ // })
+ // console.log(mainUser)
+ // console.log(data)
+
+  //socket.on("authFailed", () => {
+    //console.log('authentication failed')
+  //})
+//useEffect(() =>{  
+  //const token = localStorage.getItem("auth-token")
+  //if(token === null){
+    //localStorage.setItem("auth-token", "")
+    //token = ""
+  //}
+  //socket.emit('toServer', token)
+//}, [data, mainUser])

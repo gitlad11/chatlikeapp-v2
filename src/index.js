@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {BrowserRouter} from 'react-router-dom';
+import {Router} from 'react-router-dom';
+import history from './history'
 import Axios from 'axios'
 
 const Authentication = async () =>{
@@ -21,9 +22,9 @@ const Authentication = async () =>{
 }
 
 ReactDOM.render(
-  <BrowserRouter>
+  <Router history={history}>
     <App mainUser={Authentication()}/>
-   </BrowserRouter>,
+   </Router>,
   document.getElementById('root')
 );
 
