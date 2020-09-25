@@ -7,11 +7,13 @@ const path = require('path')
 const multer = require('multer')
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
+const faker = require('faker')
+const moment = require('moment')
+const config = require('./config')
 
 const app = express()
-//const server = http.Server(app)
-//const socketio = io(server)
-
+const server = http.Server(app)
+const socketio = io(server)
 
 
 var imgStorage = multer.diskStorage({
@@ -38,18 +40,18 @@ multer({
 
 var imgHandler = multer({ storage : imgStorage, fileFilter : imgFilter })
 
-const MongoURI = 'mongodb://localhost:27017'
-const DB = 'test'
+const MongoURI = config.DB_URI
 const PORT = 3004
-mongoose.connect(`${MongoURI}/${DB}`,
+mongoose.connect(MongoURI,
 			{useNewUrlParser: true, useUnifiedTopology : true}, (error) =>{
 			mongoose.Promise = global.Promise
 			mongoose.connection.on('error', error => {
 				console.log(`error with mongodb :` + error)
 			})
-			console.log('connected to collection ' + DB)
-			app.listen(PORT, console.log(`server is running on ${PORT}`))
+			console.log('connected to collection ')
+			server.listen(PORT, console.log(`server is running on ${PORT}`))
 			})
+
 app.use(cors({
 	origin : "http://localhost:3000",
 	credentials : true
@@ -57,6 +59,8 @@ app.use(cors({
 app.use(express.json())
 app.use(express.urlencoded({ extended : true }))
 app.use(express.Router())
+app.use(express.static(__dirname + '/avatars'))
+app.use(express.static(__dirname + '/public'))
 
 const Contact = require('./models/Contact')
 const Message = require('./models/Message')
@@ -77,20 +81,33 @@ app.get('/contacts', (req, res) => {
 })
 
 app.post('/registration', imgHandler.single('file'), async (req, res) => {
-	if(req.body.number !== 0){
-	var contact = new Contact({
-		name : req.body.name,
-		number : req.body.number,
-		avatar : req.file.filename,
-	}) 
-	await contact.save().then((contact) =>{
+	if(req.body.number.length !== 0){
+	await Contact.findOne({ number : req.body.number }).then((contact) => {
+	if(!contact || contact == null){
+
+	if(req.file){	
+		var contact = new Contact({
+			name : req.body.name,
+			number : req.body.number,
+			avatar : req.file.filename,
+			}) 
+	} else {
+		var contact = new Contact({
+			name : req.body.name,
+			number : req.body.number,
+		})
+	}
+	    contact.save().then((contact) =>{
 		return res.status(201).json({'success' : true,'message' : 'Account created!', 'contact' : contact })
-	}).catch(error => {
+		}).catch(error => {
 		return res.status(500).json({'success' : false , 'message' : error.message })
-	})
+		})
+
+	} else { return res.json({ 'success' : false , 'message' : "Such contact alredy exists!" }) }
+})	
 } else {
 	return res.json({'success' : false , 'message' : 'Phone number is required!'})
-}
+	}
 })
 
 app.post('/login', (req, res) =>{
@@ -117,10 +134,18 @@ app.post('/authenticate', async ( req, res) =>{
 				const verified = jwt.verify(token , "secret")
 					if(!verified){ return res.json(false) }
 				const contact = await Contact.findById(verified.id)
-					if(!contact){ return res.json(false) }
-				//console.log(contact)	
+					if(!contact){ return res.json({user : {}}) }
+				console.log(contact)	
 				return res.json({ user : contact })	
 		}	
+})
+
+app.post('/friends', async ( req, res) => {
+	const friends = req.body
+	Friend.find({'_id' : { $in : friends }}).then((friends) => {
+		//console.log(friends)
+		res.json(friends)
+	})
 })
 
 app.post('/contacts', async (req, res) =>{
@@ -136,26 +161,26 @@ app.post('/contacts', async (req, res) =>{
 })
 
 app.put('/add', (req, res) =>{
-	if(req.body.from !== req.body.to){
-		const fid = req.body.from
-		const tid = req.body.to
+	if(req.body.from.number !== req.body.to.number){
+		const from = req.body.from
+		const to = req.body.to
+		const friendf = from.number + to.number
+		const friendt = to.number + from.number
 		try {
-			Invite.findOne({ $or : [ {'from' : fid, 'to' : tid }, { 'from' : tid, 'to' : fid } ] }).then((err, invite) =>{
-
-			if(err){ console.log('Invite error :' + err) }	
+			Invite.find({ '_id' : { $in : [friendf, friendt] } }).then((invite) =>{
 			
-			if(!invite || invite == null){ 
-			const invite = new Invite({ 'from' : fid, 'to' : tid }).save()
+			if(invite.length === 0){ 
+			const invite = new Invite({ '_id' : friendf }).save()
 
-			const friendf = new Friend({ id : fid }).save().then((friendf) => {
-				Contact.findOneAndUpdate({ "_id" : tid } , { $push : { "friends" : friendf }},
+			const friendF = new Friend({ '_id' : friendf, contact : { 'name' : from.name, 'number' : from.number, 'avatar' : from.avatar } }).save().then((friendf) => {
+				Contact.findOneAndUpdate({ "_id" : to._id } , { $push : { "friends" : friendf._id }},
 										(err,result) => { 
 											if(err){ console.log(err) }
 											console.log(result) 
 										})
 			})
-			const friendt = new Friend({ id : tid }).save().then((friendt) => {
-				Contact.findOneAndUpdate({ "_id" : fid }, { $push : { "friends" : friendt }},
+			const friendT = new Friend({ '_id' : friendt, contact : { 'name' : to.name, 'number' : to.number, 'avatar' : to.avatar} }).save().then((friendt) => {
+				Contact.findOneAndUpdate({ "_id" : from._id }, { $push : { "friends" : friendt._id }},
 										(err, result) =>{
 											if(err){ console.log(err) }
 											console.log(result)	
@@ -168,11 +193,58 @@ app.put('/add', (req, res) =>{
 		} catch(error){ 
 			console.log(error); return; 
 			} 	
-	} else { return res.json({ 'success' : false, 'error' : true, 'message' : 'you can not add yourself' }) }
+	} else { return res.json({ 'success' : false, 'error' : true, 'message' : 'it`s you!' }) }
+})
+
+app.put('/messages', (req, res) => {
+	console.log(req.body)
+	const from = req.body.from
+	const to = req.body.to
+	const friendf = from.number + to.contact.number
+	const friendt = to.contact.number + from.number
+
 })
 
 
 ///////////////SOCKET////////////////////
+
+socketio.on('connection', (socket) =>{
+	console.log(socket['id'] + " has connected")
+	socket.on('messageSend', (data) => {
+		console.log(data)
+		const from = data.from
+		const to = data.to
+		const friendfrm = from.number + to.contact.number
+		const friendto = to.contact.number + from.number
+		const message = new Message({
+			'msg' : data.message,
+			'from' : from.number,
+			'to' : to.contact.number,
+			'date' : moment().format('M D h:mm ')
+		}).save().then((message) => {
+			Friend.find({ '_id' : { $in : [friendfrm, friendto] } }).then((friends) => {
+				friends.forEach((friend) => friend.update({ $push : { 'messages' : message } }, (err, result) => { 
+					if(err){
+						console.log(err)
+					}
+					console.log(result) 
+					}))
+			})
+		})	
+	})
+
+	socket.on('getDialog', (data) => {
+		Friend.find({'_id' : { $in : data.contacts }}).then((friends) => {
+		socketio.emit('dialogs',  friends)
+	})
+})
+	socket.on('disconnect', (socket) =>{
+		console.log(socket['id'] + " disconnected")
+	})
+})
+
+
+
 //socketio.use(function(socket, next){
 	//if (socket.handshake.query && socket.handshake.query.token){
 		//jwt.verify(socket.handshake.query.token, 'secret',(error)=>{
@@ -185,22 +257,4 @@ app.put('/add', (req, res) =>{
 //.on('connection', (socket) => {
 	//console.log(socket['id'] + ' has connected!')
 
-//})
-//socketio.sockets.on('connection', (socket) =>{
-	//console.log(socket['id'] + " has connected")
-	//socket.on("toServer", (token) =>{
-		//console.log(token)
-		//if(!token){
-			//socket.emit("authFailed", { data : false })
-		//}
-		//const verified = jwt.verify(token, 'secret') 
-		//console.log(verified.id)
-		//const contact = Contact.findById(verified.id).then((contact) =>{
-			//socket.emit("toClient", contact )
-		//}
-			//)
-	//})
-	//socket.on('disconnect', (socket) =>{
-		//console.log(socket['id'] + " disconnected")
-	//})
 //})

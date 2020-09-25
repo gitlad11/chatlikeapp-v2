@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const faker = require('faker')
 
 const Schema = mongoose.Schema
 
@@ -16,7 +17,7 @@ var messageSchema = new Schema({
 		type : Boolean , default : false
 	},
 	date : { 
-		type : Date 
+		type : Date
 	},
 })
 module.exports = mongoose.model('Message' , messageSchema)

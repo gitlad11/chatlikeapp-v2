@@ -7,19 +7,19 @@ function Dialog(props){
 	
 	//const messages = useContext(UserContext)
 	const messages = props.messages
-	
+	const mainUser = props.mainUser
 	//creating ref - reference for scroll
 	const scrollEnd = useRef(null)
-
 	//while messages is loading , will scroll down to div.ref
 	useEffect(() => {
 		scrollEnd.current.scrollIntoView()
 	}, [messages])
 	return (
 			<div className="chats">
-			{ messages.sort((fir, sec) => fir.date.getTime() - sec.date.getTime())
+			{ messages.sort((fir, sec) => Date.parse(fir.date) - Date.parse(sec.date))
 				.map((message) => (
-                <Message message={message} 
+                <Message mainUser={mainUser}
+                		 message={message} 
                 		 key={message.id}/>
 			))
 			}

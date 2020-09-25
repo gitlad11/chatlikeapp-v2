@@ -3,6 +3,8 @@ import UserAvatar from './Images/icons8-male-user.png'
 
 function SideHeader(props){
 	const user = props.user
+	const setContactSelected =props.setContactSelected
+
 	if(!user.avatar || user.avatar == null){
 	return (
 		<header>

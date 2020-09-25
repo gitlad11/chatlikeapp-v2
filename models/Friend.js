@@ -2,9 +2,12 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const friendSchema = new Schema({
-	id : {
-		type : String
-	},
+	_id : {type : String},
+	contact : {
+		name : {type : String},
+		number : {type : String},
+		avatar : { type : String},
+	}, 
 	messages : []
 })
 

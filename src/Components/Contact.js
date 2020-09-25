@@ -4,28 +4,30 @@ import CheckIcon from './Images/icons8-double-24.png'
 import NCheckIcon from './Images/icons8-checkmarkblue.svg'
 
 function Contact(props){
-	const contact = props.contact
+	const friend = props.friend
 	const messages = props.messages
+    console.log(messages)
 	const setContactSelected = props.setContactSelected
-	const lastTime = Math.max(...messages.map((message) => message.date.getTime()))
-	const lastMessage = messages.find((message) => message.date.getTime() === lastTime)
-
 	const minimize = (message,length) => {
 		return message.length > length ? 
 				`${message.substring(0, length)} ...` 
 				: message
 	}
 	const Select = () => {
-		setContactSelected(contact)
+		setContactSelected(friend)
 	}
-	return (
-		<div className="contact-box" onClick ={Select}>
-                        <Avatar contact={contact}/>
 
+if(messages.length !== 0){
+	const lastTime = Math.max(...messages.map((message) => Date.parse(message.date)))
+    const lastMessage = messages.find((message) => Date.parse(message.date) === lastTime)
+   
+	return (<div className="contact-box" onClick ={Select}>
+                        <Avatar contact={friend.contact}/>
                         <div className="right-section">
                             <div className="contact-box-header">
-                                <h3 className="avatar-title">{contact.name}</h3>
-                                <span className="time-mark">{lastMessage.date.toLocaleDateString()}</span>
+                            	<h3 className="avatar-title">{friend.contact.name}</h3>
+                                <h5 style={{color : "darkgrey"}} className="avatar-title">{friend.contact.number}</h5> 
+                                <span className="time-mark">{lastMessage.date}</span>
                             </div>
                             <div className="last-msg">
                             	{ lastMessage.seen == true ? (
@@ -36,7 +38,19 @@ function Contact(props){
                                 <span className="text">{minimize(lastMessage.msg, 40)}</span>
                             </div>
                         </div>
-                    </div>
-		)
+        		</div>)
+		} else {
+			return (
+					<div className="contact-box" onClick ={Select}>
+                        <Avatar contact={friend.contact}/>
+                        <div className="right-section">
+                            <div className="contact-box-header">
+          						<h3 className="avatar-title">{friend.contact.name}</h3>
+                                <h5 style={{color : "darkgrey"}}>{friend.contact.number}</h5> 
+                            </div>
+                        </div>
+        			</div>
+				)
+		}
 }
 export default Contact 

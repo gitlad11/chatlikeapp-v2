@@ -7,23 +7,10 @@ import {Router} from 'react-router-dom';
 import history from './history'
 import Axios from 'axios'
 
-const Authentication = async () =>{
-	var token = localStorage.getItem("auth-token")
-	if(token == null){
-		localStorage.setItem("auth-token", "")
-		token = ""
-	}
-	const User = await Axios.post('http://localhost:3004/authenticate',
-		null,{
-			headers : { "x-auth-token" : token }
-		}
-	)
-	return User
-}
 
 ReactDOM.render(
   <Router history={history}>
-    <App mainUser={Authentication()}/>
+    <App/>
    </Router>,
   document.getElementById('root')
 );

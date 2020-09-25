@@ -13,6 +13,8 @@ import Register from './Register'
 //import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import history from './history'
+import socket from './Socket'
+
 
 
 
@@ -27,6 +29,7 @@ function App() {
   const [filteredContacts, setFilterContacts] = useState([])
   const [darktheme, setDarkTheme] = useState(false)
 
+
   //TO DO CREATE ICON WHEN MESSAGE IS TYPING
   //useEffect(() => {
     //console.log(message)
@@ -34,7 +37,7 @@ function App() {
 
 useEffect(() => {
    async function fetch(){
-    const token = localStorage.getItem("auth-token")
+    var token = localStorage.getItem("auth-token")
     if(token === null){
       localStorage.setItem("auth-token", "")
       token = ""
@@ -44,16 +47,17 @@ useEffect(() => {
               { "x-auth-token" : token } 
             })
             await setMainUser(tokenValid.data.user)
-            await setData(tokenValid.data.user.friends || [])
+            await axios.post('http://localhost:3004/friends', tokenValid.data.user.friends)
+            .then((res) => setData(res.data))
     }
     fetch()        
   }, [])
 
-  console.log(data)
+  console.log(contactSelected)
 
   //each time contactSelected, data, search is changing
   useEffect(() => {
-    const curContact = data.find((d) => d.contact.id === contactSelected.id)
+    const curContact = data.find((d) => d._id === contactSelected._id)
     setCurrentMessages((curContact && curContact.messages) || [])
     filterContacts(data, search)
   }, [contactSelected, data, search])
@@ -72,11 +76,27 @@ useEffect(() => {
     //setMessage('')
   //}
 
-  async function pushMessage(){
-    const index = data.findIndex((d) => d.contact.id === contactSelected.id)
-    const message = {from : mainUser.id , to : index, message : message }
-    await axios.post('http://localhost:3004/messages/', message)
+  //async function pushMessage(){
+    //const index = data.findIndex((d) => d.contact._id === contactSelected._id)
+    //await axios.put('http://localhost:3004/messages/',
+                     //{from : mainUser , to : contactSelected , message : message }).then((res) =>{
+      //console.log(res)
+   // })
+  //}
+  async function getDialogs(){
+    socket.emit('getDialog', { contacts : mainUser.friends })
+
+    socket.on('dialogs', (friends) => {
+      setData(friends)
+    })
   }
+ 
+  async function pushMessage(){
+    socket.emit('messageSend', { from : mainUser, to : contactSelected, message : message })
+    setMessage('')
+    getDialogs()
+  }
+
 
   //comparing data and search state
   function filterContacts(data, search){
@@ -95,12 +115,12 @@ useEffect(() => {
                  setSearch={setSearch}
                  filteredContacts={filteredContacts}
                  setContactSelected={setContactSelected}/>
-          { contactSelected.id ? (       
+          { contactSelected._id ? (       
          <main className={darktheme== true ? 'dark' : 'light'}>
             <MainHeader contactSelected={contactSelected}
                         darktheme={darktheme}
                         setDarkTheme={setDarkTheme}/>
-            <Dialog messages={currentMessages}/>
+            <Dialog mainUser = {mainUser}  messages={currentMessages}/>
             <MessageInput message={message}
                           setMessage={setMessage}
                           pushMessage={pushMessage}/>

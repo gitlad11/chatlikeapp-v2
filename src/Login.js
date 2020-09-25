@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import LoginForm from './Components/LoginForm'
 import NextForm from './Components/NextForm'
 import axios from 'axios'
+import history from './history'
 
 function Login(){
 	const [step, setStep] = useState(1)
@@ -25,8 +26,9 @@ function Login(){
 			setError(response.data.error)
 			setMessage(response.data.message)
 			if(response.data.success && response.data.token){
-				console.log(response.data)
 				localStorage.setItem("auth-token", response.data.token)
+				setTimeout(1)
+				window.location.reload()
 			} 
 		})
 	}

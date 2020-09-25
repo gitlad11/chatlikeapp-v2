@@ -6,17 +6,15 @@ import { Twemoji } from "react-emoji-render"
 
 function Message(props){
 	const message = props.message
-
+    const isMainUser = props.mainUser.number
 	return (
-		  <div className={`message ${message.isMainUser ? 'sent': 'received'}`}>
+		  <div className={`message ${message.from === isMainUser ? 'sent': 'received'}`}>
                         <Twemoji text={message.msg}/>
                     <div className="metadata">
                         <span className="date">{message.date.toLocaleString()}</span>
-                        { message.isMainUser && message.seen == true ? (
-                            <img src={CheckIcon} className='icon-small'/>
-                            ) : (
-                            <img src={NCheckIcon} className='icon-small'/>
-                            )}
+                        { message.from === isMainUser ? (
+                            <img src={ message.seen == true ? CheckIcon : NCheckIcon} className='icon-small'/>
+                            ) : (<img className='icon-small'/>)}
                     </div>
            </div>
 		)

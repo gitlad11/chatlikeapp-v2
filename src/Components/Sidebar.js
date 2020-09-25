@@ -17,7 +17,8 @@ function Sidebar(props){
 
 	return(
 		<aside>
-            <SideHeader user={user}/>
+            <SideHeader setContactSelected={setContactSelected}
+                        user={user}/>
                 <div className="search">
                     <input 
                     onChange = {onSearch}
@@ -28,10 +29,10 @@ function Sidebar(props){
                 </div>
 
                 <div className="contact-boxes">
-                {filteredContacts.map(({contact, messages}) => (
-                    <Contact contact={contact} 
-                             key={contact.id}
-                             messages = {messages}
+                {filteredContacts.map((friend) => (
+                    <Contact friend={friend}
+                             key={friend._id}
+                             messages = {friend.messages}
                              setContactSelected={setContactSelected}
                              />
                     ))}

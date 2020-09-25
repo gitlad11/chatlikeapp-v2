@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import MainBg from './Images/Main.jpg'
 import axios from 'axios'
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import AddItem from './AddItem'
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import history from '../history'
+
 
 function Main(props){
 	const user = props.user
@@ -20,7 +19,10 @@ function Main(props){
 			.catch((error) => console.log(error))
 		console.log(searchR)
 	}
-
+	const Logout = () => {
+		localStorage.removeItem("auth-token")
+		window.location.reload()
+	}
 	return (
 		<div className='Main'>
 			<img src={MainBg} alt='Welcome'/>
@@ -44,6 +46,9 @@ function Main(props){
 				</div>
 			</div>			
 			<h2>Stay connected!</h2>
+			<Button onClick={Logout}
+					color="secondary"
+					variant="outlined">Logout</Button>
 		</div>
 		)
 }
