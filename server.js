@@ -44,6 +44,10 @@ var imgHandler = multer({ storage : imgStorage, fileFilter : imgFilter })
 const MongoURI = config.DB_URI
 const PORT = process.env.PORT || 3004
 
+if(process.env.NODE_ENV === 'production'){
+	app.use(express.static('/build'))
+}
+
 mongoose.connect(MongoURI,
 			{useNewUrlParser: true, useUnifiedTopology : true}, (error) =>{
 			mongoose.Promise = global.Promise
@@ -55,7 +59,7 @@ mongoose.connect(MongoURI,
 			})
 
 app.use(cors({
-	origin : "http://localhost:3000",
+	origin : "http://localhost:3000" || config.URI,
 	credentials : true
 }))
 app.use(express.json())
@@ -238,18 +242,3 @@ socketio.on('connection', (socket) =>{
 	})
 })
 
-
-
-//socketio.use(function(socket, next){
-	//if (socket.handshake.query && socket.handshake.query.token){
-		//jwt.verify(socket.handshake.query.token, 'secret',(error)=>{
-			//if (error) return (new Error('Authentication error'))
-			//socket.decoded = decoded
-			//next()	
-		//})
-	//} else { next(new Error('Authentication failed!')) }
-//})
-//.on('connection', (socket) => {
-	//console.log(socket['id'] + ' has connected!')
-
-//})

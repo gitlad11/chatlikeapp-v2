@@ -28,13 +28,15 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "install-client" : "npm install",
+    "heroku-build" : "npm run install-client && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:3004/",
+  "proxy": "https://pipe-chatte.herokuapp.com",
   "browserslist": {
     "production": [
       ">0.2%",

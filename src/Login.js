@@ -20,7 +20,7 @@ function Login(){
 	const submit = (event) =>{
 		event.preventDefault()
 		const data = { 'name' : name, 'number' : number }
-		const res = axios.post('http://localhost:3004/login', 
+		const res = axios.post('/login', 
 			data, { headers : {"Content-Type" : "application/json"}
 		}).then((response) => { 
 			setError(response.data.error)

@@ -42,12 +42,12 @@ useEffect(() => {
       localStorage.setItem("auth-token", "")
       token = ""
     }
-    const tokenValid = await axios.post('http://localhost:3004/authenticate',
+    const tokenValid = await axios.post('/authenticate',
             null, { headers : 
               { "x-auth-token" : token } 
             })
             await setMainUser(tokenValid.data.user)
-            await axios.post('http://localhost:3004/friends', tokenValid.data.user.friends)
+            await axios.post('/friends', tokenValid.data.user.friends)
             .then((res) => setData(res.data))
     }
     fetch()        
@@ -59,20 +59,6 @@ useEffect(() => {
     setCurrentMessages((curContact && curContact.messages) || [])
     filterContacts(data, search)
   }, [contactSelected, data, search])
-
-  //creating new message
-  //function pushMessage(){
-    //const index = data.findIndex((d) => d.contact.id === contactSelected.id)
-    //const newData = Object.assign([], data, {
-      //[index]:{
-        //contact: contactSelected,
-        //messages: [...data[index].messages, new Message(true, message, new Date())]
-      //}
-    //})
-
-    //setData(newData)
-    //setMessage('')
-  //}
 
   async function getDialogs(){
     socket.emit('getDialog', { contacts : mainUser.friends })
@@ -135,28 +121,3 @@ useEffect(() => {
 }
 
 export default App;
-
-//////////////socket////////////////////////
-//const token = localStorage.getItem("auth-token")
-  //const socket = io.connect('http://localhost:3004',{
-    //query : 'token =' + token
-  //})
-
- //socket.on('toClient' , (contact) =>{
-       // setMainUser(contact)
-       // setData(contact.friends)
- // })
- // console.log(mainUser)
- // console.log(data)
-
-  //socket.on("authFailed", () => {
-    //console.log('authentication failed')
-  //})
-//useEffect(() =>{  
-  //const token = localStorage.getItem("auth-token")
-  //if(token === null){
-    //localStorage.setItem("auth-token", "")
-    //token = ""
-  //}
-  //socket.emit('toServer', token)
-//}, [data, mainUser])
