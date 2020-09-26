@@ -44,9 +44,9 @@ var imgHandler = multer({ storage : imgStorage, fileFilter : imgFilter })
 const MongoURI = config.DB_URI
 const PORT = process.env.PORT || 3004
 
-if(process.env.NODE_ENV === 'production'){
-	app.use(express.static('/build'))
-}
+//if(process.env.NODE_ENV === 'production'){
+	//app.use(express.static('/build'))
+//}
 
 mongoose.connect(MongoURI,
 			{useNewUrlParser: true, useUnifiedTopology : true}, (error) =>{
@@ -66,6 +66,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : true }))
 app.use(express.Router())
 app.use(express.static(__dirname + '/avatars'))
+app.use(expres.static(__dirname + '/build'))
 app.use(express.static(__dirname + '/public'))
 
 const Contact = require('./models/Contact')
