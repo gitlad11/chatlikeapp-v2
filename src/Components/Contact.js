@@ -2,8 +2,10 @@ import React from 'react'
 import Avatar from './Avatar'
 import CheckIcon from './Images/icons8-double-24.png'
 import NCheckIcon from './Images/icons8-checkmarkblue.svg'
+import socket from '../Socket'
 
 function Contact(props){
+    const user = props.user
 	const friend = props.friend
 	const messages = props.messages
     console.log(messages)
@@ -15,11 +17,23 @@ function Contact(props){
 	}
 	const Select = () => {
 		setContactSelected(friend)
+        if(messages.length !== 0){
+            toSeen()
+        }
 	}
 
 if(messages.length !== 0){
 	const lastTime = Math.max(...messages.map((message) => Date.parse(message.date)))
     const lastMessage = messages.find((message) => Date.parse(message.date) === lastTime)
+
+    var toSeen = () =>{
+        if(lastMessage.from !== user.number){
+        socket.emit("messageSeen", { from : user.number, to : friend.contact.number })
+        socket.on('seen', () => {
+            socket.emit('getDialogs', { contacts : user.friends })
+        })
+        }
+    }
    
 	return (<div className="contact-box" onClick ={Select}>
                         <Avatar contact={friend.contact}/>

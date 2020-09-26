@@ -11,6 +11,7 @@ const faker = require('faker')
 const moment = require('moment')
 const config = require('./config')
 
+
 const app = express()
 const server = http.Server(app)
 const socketio = io(server)
@@ -41,7 +42,8 @@ multer({
 var imgHandler = multer({ storage : imgStorage, fileFilter : imgFilter })
 
 const MongoURI = config.DB_URI
-const PORT = 3004
+const PORT = process.env.PORT || 3004
+
 mongoose.connect(MongoURI,
 			{useNewUrlParser: true, useUnifiedTopology : true}, (error) =>{
 			mongoose.Promise = global.Promise
@@ -72,13 +74,6 @@ app.get('/', (req, res) => {
 	res.send('Welcome to chat api!')
 })
 
-app.get('/contacts', (req, res) => {
-	Contact.find({}).exec()
-	.then((document) =>{
-		const data = JSON.stringify(document)
-		res.send(data)
-	})
-})
 
 app.post('/registration', imgHandler.single('file'), async (req, res) => {
 	if(req.body.number.length !== 0){
@@ -176,7 +171,7 @@ app.put('/add', (req, res) =>{
 				Contact.findOneAndUpdate({ "_id" : to._id } , { $push : { "friends" : friendf._id }},
 										(err,result) => { 
 											if(err){ console.log(err) }
-											console.log(result) 
+	 											console.log(result)
 										})
 			})
 			const friendT = new Friend({ '_id' : friendt, contact : { 'name' : to.name, 'number' : to.number, 'avatar' : to.avatar} }).save().then((friendt) => {
@@ -196,20 +191,13 @@ app.put('/add', (req, res) =>{
 	} else { return res.json({ 'success' : false, 'error' : true, 'message' : 'it`s you!' }) }
 })
 
-app.put('/messages', (req, res) => {
-	console.log(req.body)
-	const from = req.body.from
-	const to = req.body.to
-	const friendf = from.number + to.contact.number
-	const friendt = to.contact.number + from.number
-
-})
 
 
 ///////////////SOCKET////////////////////
 
 socketio.on('connection', (socket) =>{
 	console.log(socket['id'] + " has connected")
+
 	socket.on('messageSend', (data) => {
 		console.log(data)
 		const from = data.from
@@ -232,6 +220,13 @@ socketio.on('connection', (socket) =>{
 			})
 		})	
 	})
+	socket.on('messageSeen', (data) => {
+		const friendfrm = data.from + data.to
+		const friendto = data.to + data.from
+		Friend.update({ '_id' : { $in : [ friendfrm, friendto ] }}, { $set : { "messages.$[].seen" : true }}, { multi : true }).then((result) => {
+			socketio.emit('seen')
+		})
+	})
 
 	socket.on('getDialog', (data) => {
 		Friend.find({'_id' : { $in : data.contacts }}).then((friends) => {
@@ -239,7 +234,7 @@ socketio.on('connection', (socket) =>{
 	})
 })
 	socket.on('disconnect', (socket) =>{
-		console.log(socket['id'] + " disconnected")
+		console.log("disconnect")
 	})
 })
 

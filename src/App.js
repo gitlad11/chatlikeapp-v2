@@ -53,8 +53,6 @@ useEffect(() => {
     fetch()        
   }, [])
 
-  console.log(contactSelected)
-
   //each time contactSelected, data, search is changing
   useEffect(() => {
     const curContact = data.find((d) => d._id === contactSelected._id)
@@ -76,21 +74,13 @@ useEffect(() => {
     //setMessage('')
   //}
 
-  //async function pushMessage(){
-    //const index = data.findIndex((d) => d.contact._id === contactSelected._id)
-    //await axios.put('http://localhost:3004/messages/',
-                     //{from : mainUser , to : contactSelected , message : message }).then((res) =>{
-      //console.log(res)
-   // })
-  //}
   async function getDialogs(){
     socket.emit('getDialog', { contacts : mainUser.friends })
-
     socket.on('dialogs', (friends) => {
       setData(friends)
-    })
+  })
   }
- 
+
   async function pushMessage(){
     socket.emit('messageSend', { from : mainUser, to : contactSelected, message : message })
     setMessage('')

@@ -30,7 +30,8 @@ function Sidebar(props){
 
                 <div className="contact-boxes">
                 {filteredContacts.map((friend) => (
-                    <Contact friend={friend}
+                    <Contact user = {user}
+                             friend={friend}
                              key={friend._id}
                              messages = {friend.messages}
                              setContactSelected={setContactSelected}
