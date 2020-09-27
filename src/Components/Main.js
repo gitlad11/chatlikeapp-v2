@@ -25,7 +25,6 @@ function Main(props){
 	}
 	return (
 		<div className='Main'>
-			<img src={MainBg} alt='Welcome'/>
 			<div className='add-contact'>
 				<div className='search'>
 				<input  placeholder='Search contact'
@@ -44,7 +43,8 @@ function Main(props){
 				))
 				}	
 				</div>
-			</div>			
+			</div>
+			<img src={MainBg} alt='Welcome'/>			
 			<h2>Stay connected!</h2>
 			<Button onClick={Logout}
 					color="secondary"

@@ -333,3 +333,30 @@ box-shadow:         3px 3px 12px 0px rgba(50, 53, 50, 0.53);
 .text.dark{
     background-color: #E6E6FA;
 }
+@media (max-width: 800px) and (max-height: 900px){
+aside{
+    width: 40%;
+    min-width: 300px;
+}
+main{
+    width: 50%;
+    min-width: 400px;
+}
+.Main{
+    background: #f8f9fa;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.add-contact{
+    width: 100%;
+    min-width: 200px;
+    position: static;
+    margin-bottom: 10px;
+    max-height: 300px;
+}
+.chats{
+    min-width: 400px;
+}
+}

@@ -17,8 +17,11 @@ function AddItem(props){
 		<div style={{ justifyContent : "space-between" }} className='contact-box'>
 				<Avatar style={{ fontSize: '60px',width: '60px',height: '60px',}} src={contact.avatar}/>
 				<div style={{ "margin" : "auto", display : "flex", flexDirection : "column" }}>
-					<h3 className='avatar-title'>{contact.name}</h3>
-					<p style= {{ marginTop: "15%", color : "darkgrey" }}>{contact.number}</p>
+					{ contact.name.length > 0 ? (
+						<h3 className='avatar-title'>{contact.name}</h3>
+						) : (
+							<h3 className='avatar-title'>{contact.number}</h3>
+						)}
 				</div>
 					<AddButton  added={added}
 								contact={contact}

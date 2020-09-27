@@ -82,7 +82,8 @@ useEffect(() => {
     setFilterContacts(result)
   }
 
-    if(mainUser || mainUser !== undefined){                        
+    if(mainUser || mainUser !== undefined){
+          history.push('/')               
     return (
         <div className="app">
         <Sidebar user={mainUser} 
