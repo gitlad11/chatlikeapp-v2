@@ -330,3 +330,6 @@ box-shadow:         3px 3px 12px 0px rgba(50, 53, 50, 0.53);
 .disactive{
     display: none;
 }
+.text.dark{
+    background-color: #E6E6FA;
+}

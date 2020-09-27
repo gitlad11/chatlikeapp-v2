@@ -12,6 +12,7 @@ const moment = require('moment')
 const config = require('./config')
 
 
+
 const app = express()
 const server = http.Server(app)
 const socketio = io(server)
@@ -45,7 +46,10 @@ const MongoURI = config.DB_URI
 const PORT = process.env.PORT || 3004
 
 if(process.env.NODE_ENV === 'production'){
-	app.use(express.static('/build'))
+	app.use(express.static(path.join(__dirname + '/build')))
+	app.get('*', (req,res)=>{
+		res.sendFile(path.join(__dirname,'/build'))
+	})
 }
 
 mongoose.connect(MongoURI,
@@ -55,8 +59,8 @@ mongoose.connect(MongoURI,
 				console.log(`error with mongodb :` + error)
 			})
 			console.log('connected to collection ')
-			server.listen(PORT, console.log(`server is running on ${PORT}`))
 			})
+server.listen(PORT, console.log(`server is running on ${PORT}`))
 
 app.use(cors({
 	origin : "http://localhost:3000" || config.URI,
@@ -65,7 +69,7 @@ app.use(cors({
 app.use(express.json())
 app.use(express.urlencoded({ extended : true }))
 app.use(express.Router())
-app.use(express.static(__dirname + '/avatars')
+app.use(express.static(__dirname + '/avatars'))
 //app.use(expres.static(__dirname + '/build'))
 app.use(express.static(__dirname + '/public'))
 
@@ -216,11 +220,11 @@ socketio.on('connection', (socket) =>{
 			'date' : moment().format('M D h:mm ')
 		}).save().then((message) => {
 			Friend.find({ '_id' : { $in : [friendfrm, friendto] } }).then((friends) => {
-				friends.forEach((friend) => friend.update({ $push : { 'messages' : message } }, (err, result) => { 
+				friends.forEach((friend) => friend.update({ $push : { 'messages' : message } }, (err) => { 
 					if(err){
 						console.log(err)
 					}
-					console.log(result) 
+					//console.log(result) 
 					}))
 			})
 		})	

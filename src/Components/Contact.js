@@ -49,7 +49,7 @@ if(messages.length !== 0){
                             	) : (
                             	<img src={NCheckIcon} alt="check" className="icon-small" />
                             	)}
-                                <span className="text">{minimize(lastMessage.msg, 40)}</span>
+                                <span className={lastMessage.from !== user.number ? "text" : "text dark"}>{minimize(lastMessage.msg, 40)}</span>
                             </div>
                         </div>
         		</div>)

@@ -64,6 +64,7 @@ useEffect(() => {
     socket.emit('getDialog', { contacts : mainUser.friends })
     socket.on('dialogs', (friends) => {
       setData(friends)
+      console.log('render')
   })
   }
 
@@ -72,8 +73,6 @@ useEffect(() => {
     setMessage('')
     getDialogs()
   }
-
-
   //comparing data and search state
   function filterContacts(data, search){
     const result = data.filter(({ contact }) => {
@@ -82,8 +81,8 @@ useEffect(() => {
     //set result of comparing in filter
     setFilterContacts(result)
   }
-  
-    if(mainUser || mainUser !== undefined){                          
+
+    if(mainUser || mainUser !== undefined){                        
     return (
         <div className="app">
         <Sidebar user={mainUser} 

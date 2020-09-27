@@ -36,7 +36,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "https://pipe-chatte.herokuapp.com",
+  "proxy": "https://chatte-verte.herokuapp.com",
   "browserslist": {
     "production": [
       ">0.2%",
