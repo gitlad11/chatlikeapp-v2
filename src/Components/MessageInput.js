@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import EmojiIcon from './Images/icons8-emoji-48.png'
+
 import SendButton from './SendButton'
 import { Twemoji } from "react-emoji-render"
 import Emojis from './Emojis'

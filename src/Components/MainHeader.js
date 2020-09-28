@@ -1,10 +1,13 @@
 import React from 'react';
 import UserAvatar from './Images/icons8-male-user.png'
 import Avatar from './Avatar'
+
+
 function MainHeader(props){
 	const friend = props.contactSelected
 	const darktheme = props.darktheme
 	const setDarkTheme = props.setDarkTheme
+	const onMain = props.onMain
 
 	const onDark = () => {
 		if(darktheme){
@@ -20,6 +23,8 @@ function MainHeader(props){
                 <h3 className="avatar-title">{friend.contact.name}</h3>
             </div>
             <button onClick={onDark} className='theme-btn'></button>
+            <button onClick={onMain}
+            		className="close-btn"></button>
         </header>
 		)
 }

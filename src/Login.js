@@ -28,6 +28,7 @@ function Login(){
 			if(response.data.success && response.data.token){
 				localStorage.setItem("auth-token", response.data.token)
 				setTimeout(1)
+				history.push('/')
 				window.location.reload()
 			} 
 		})

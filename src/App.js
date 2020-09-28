@@ -73,6 +73,11 @@ useEffect(() => {
     setMessage('')
     getDialogs()
   }
+
+  async function onMain(){
+    setContactSelected({})
+  }
+
   //comparing data and search state
   function filterContacts(data, search){
     const result = data.filter(({ contact }) => {
@@ -93,7 +98,8 @@ useEffect(() => {
                  setContactSelected={setContactSelected}/>
           { contactSelected._id ? (       
          <main className={darktheme== true ? 'dark' : 'light'}>
-            <MainHeader contactSelected={contactSelected}
+            <MainHeader onMain={onMain}
+                        contactSelected={contactSelected}
                         darktheme={darktheme}
                         setDarkTheme={setDarkTheme}/>
             <Dialog mainUser = {mainUser}  messages={currentMessages}/>
