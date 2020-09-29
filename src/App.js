@@ -6,6 +6,7 @@ import MainHeader from './Components/MainHeader'
 import MessageInput from './Components/MessageInput'
 import Dialog from './Components/Dialog'
 import Main from './Components/Main'
+import Hamburger from './Components/hamburger'
 //import { mainUser , messages, Message } from './Data'
 import {Switch, Route } from 'react-router-dom'
 import Login from './Login'
@@ -28,7 +29,7 @@ function App() {
   const [search, setSearch] = useState('')
   const [filteredContacts, setFilterContacts] = useState([])
   const [darktheme, setDarkTheme] = useState(false)
-
+  const [ open , setOpen ] = useState(false)
 
   //TO DO CREATE ICON WHEN MESSAGE IS TYPING
   //useEffect(() => {
@@ -42,12 +43,12 @@ useEffect(() => {
       localStorage.setItem("auth-token", "")
       token = ""
     }
-    const tokenValid = await axios.post('/authenticate',
+    const tokenValid = await axios.post('http://localhost:3004/authenticate',
             null, { headers : 
               { "x-auth-token" : token } 
             })
             await setMainUser(tokenValid.data.user)
-            await axios.post('/friends', tokenValid.data.user.friends)
+            await axios.post('http://localhost:3004/friends', tokenValid.data.user.friends)
             .then((res) => setData(res.data))
     }
     fetch()        
@@ -77,6 +78,9 @@ useEffect(() => {
   async function onMain(){
     setContactSelected({})
   }
+  const onHam = () => {
+    if(open){ setOpen(false)} else { setOpen(true) }
+  }
 
   //comparing data and search state
   function filterContacts(data, search){
@@ -91,7 +95,11 @@ useEffect(() => {
           history.push('/')               
     return (
         <div className="app">
-        <Sidebar user={mainUser} 
+        <Hamburger onShow={onHam} 
+                open={open} />
+                
+        <Sidebar open={open} 
+                user={mainUser} 
                 search={search} 
                  setSearch={setSearch}
                  filteredContacts={filteredContacts}

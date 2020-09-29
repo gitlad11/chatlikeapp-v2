@@ -9,7 +9,7 @@ function AddItem(props){
 	const contact = props.contact
 	const [ added, setAdded ] = useState({ success : false , message : ''})
 	const addFriend = () =>{
-		const result = axios.put('/add', { from : user , to : contact })
+		const result = axios.put('http://localhost:3004/add', { from : user , to : contact })
 		.then((result) => setAdded({ success : result.data.success , message : result.data.message }))
 		window.location.reload()
 	}

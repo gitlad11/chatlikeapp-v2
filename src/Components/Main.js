@@ -14,7 +14,7 @@ function Main(props){
 	const addChange = (event) => {
 		setQuery(event.target.value)
 		const data = { query : query }
-		const result = axios.post('/contacts', data)
+		const result = axios.post('http://localhost:3004/contacts', data)
 			.then((result) => setSearchR(result.data))
 			.catch((error) => console.log(error))
 		console.log(searchR)
@@ -46,7 +46,8 @@ function Main(props){
 			</div>
 			<img src={MainBg} alt='Welcome'/>			
 			<h2>Stay connected!</h2>
-			<Button onClick={Logout}
+			<Button style={{ 'position' : 'static' }}
+					onClick={Logout}
 					color="secondary"
 					variant="outlined">Logout</Button>
 		</div>

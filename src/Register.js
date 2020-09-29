@@ -66,7 +66,7 @@ function Register(){
 		data.append('number', number)
 		data.append('file', file)
 		try {
-			const res = await axios.post('/registration',
+			const res = await axios.post('http://localhost:3004/registration',
 										 data, { headers:{
 										 	'Content-Type' : 'multipart/form-data' }
 					}).then((response) => { 

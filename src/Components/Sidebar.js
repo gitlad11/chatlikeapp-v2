@@ -10,13 +10,14 @@ function Sidebar(props){
     const setSearch = props.setSearch
     const filteredContacts = props.filteredContacts
     const setContactSelected = props.setContactSelected
+    const open = props.open
 
     const onSearch = (event) =>{
         setSearch(event.target.value)
     }
 
 	return(
-		<aside>
+		<aside className={ open ? 'sideActive' : ''} >
             <SideHeader setContactSelected={setContactSelected}
                         user={user}/>
                 <div className="search">
