@@ -1,4 +1,4 @@
 {
 	"DB_URI" : "mongodb+srv://admin:GoodMongodb@cluster0.pcwin.gcp.mongodb.net/chat?retryWrites=true&w=majority",
-	"URL" :  "https://chatte-verte.herokuapp.com"
+	"URL" :  "https://vert-chat.herokuapp.com"
 }
