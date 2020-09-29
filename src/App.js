@@ -63,11 +63,11 @@ useEffect(() => {
 
    async function getDialogs(){
     socket.emit('getDialog', { contacts : mainUser.friends })
-  }
-   socket.on('dialogs', (friends) => {
+     socket.on('dialogs', (friends) => {
       setData(friends)
       console.log('render')
   })
+  }
 
   async function pushMessage(){
     socket.emit('messageSend', { from : mainUser, to : contactSelected, message : message })
