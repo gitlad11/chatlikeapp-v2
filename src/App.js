@@ -21,8 +21,8 @@ import socket from './Socket'
 
 function App() {  
   
-  const [data , setData] = useState([])
   const [mainUser, setMainUser ] = useState()
+  const [data , setData] = useState([])
   const [contactSelected, setContactSelected] = useState({})
   const [currentMessages , setCurrentMessages] = useState([])
   const [message, setMessage] = useState('')
@@ -61,13 +61,13 @@ useEffect(() => {
     filterContacts(data, search)
   }, [contactSelected, data, search])
 
-  async function getDialogs(){
+   async function getDialogs(){
     socket.emit('getDialog', { contacts : mainUser.friends })
-    socket.on('dialogs', (friends) => {
+  }
+   socket.on('dialogs', (friends) => {
       setData(friends)
       console.log('render')
   })
-  }
 
   async function pushMessage(){
     socket.emit('messageSend', { from : mainUser, to : contactSelected, message : message })

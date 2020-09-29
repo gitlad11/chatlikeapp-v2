@@ -17,6 +17,7 @@ aside {
     flex-direction: column;
     border-right:1px solid lightgrey;
     transition: 0.6s ease;
+    background: #e5e1e5;
 }
 
 main {
@@ -136,6 +137,7 @@ main header {
     align-items: center;
     background: #f0f0f0;
     justify-content: space-between;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
 
 aside header {
@@ -160,6 +162,7 @@ input {
 
 .chat-input input {
     height: 2rem;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
 input:focus {
     outline: none;
@@ -171,6 +174,7 @@ input:focus {
 }
 .chat-input {
     width: 92%;
+
 }
 .send {
     width: 8%;
@@ -220,7 +224,7 @@ input:focus {
 }
 
 .Main {
-    background: #f8f9fa;
+    background: #fff;
     flex: 1;
     display: flex;
     justify-content: center;
@@ -350,6 +354,9 @@ box-shadow:         3px 3px 12px 0px rgba(50, 53, 50, 0.53);
 .hamburger{
     display: none;
 }
+.Input{
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
 @media (max-width: 800px) and (max-height: 900px){
 aside{
     width: 40%;
@@ -359,8 +366,11 @@ main{
     width: 50%;
     min-width: 400px;
 }
+.find-contacts{
+    max-height: 240px;
+    overflow-y: scroll!important;
+}
 .Main{
-    background: #f8f9fa;
     display: block;
     justify-content: center;
     align-items: center;
@@ -374,7 +384,7 @@ main{
     margin-bottom: 10px;
 }
 .chats{
-    min-width: 400px;
+    min-width: 300px;
     min-height: 300px; 
 }
 .app {
@@ -391,7 +401,6 @@ main{
         width: 100%;
         z-index: 1;
         height: 100%;
-        background-color: #fff;
      }
      .sideActive{
         display: flex!important;
@@ -403,6 +412,10 @@ main{
         position: absolute;
         z-index: 3; 
     }
+    .Main{
+    background: #fff;
+    height: inherit;
+}
     .app{
         display: block;
         height: 100%;

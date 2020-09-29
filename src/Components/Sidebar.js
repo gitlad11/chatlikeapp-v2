@@ -21,7 +21,7 @@ function Sidebar(props){
             <SideHeader setContactSelected={setContactSelected}
                         user={user}/>
                 <div className="search">
-                    <input 
+                    <input className='Input'
                     onChange = {onSearch}
                     value={search}
                     type="text" 

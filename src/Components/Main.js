@@ -27,12 +27,18 @@ function Main(props){
 		<div className='Main'>
 			<div className='add-contact'>
 				<div className='search'>
-				<input  placeholder='Search contact'
+				<input className='Input' placeholder='Search contact'
 					value={query}
 					onChange={addChange}></input>
 				</div>
 
-				<div className='contact-boxes'>
+				<div className='contact-boxes find-contacts'>
+				{ searchR.length > 0 ? (
+					<b style={{ 'margin' : '1px',
+							'borderBottom' : '1px solid grey' }}>found: {searchR.length}</b>
+					) : (
+						<div></div>
+					)}
 				{searchR.map((contact) => (
 
 					<AddItem user={user}	
@@ -44,7 +50,7 @@ function Main(props){
 				}	
 				</div>
 			</div>
-			<img src={MainBg} alt='Welcome'/>			
+			<img style={{ "margin" : "20px" }} src={MainBg} alt='Welcome'/>			
 			<h2>Stay connected!</h2>
 			<Button style={{ 'position' : 'static' }}
 					onClick={Logout}

@@ -237,11 +237,12 @@ socketio.on('connection', (socket) =>{
 		})
 	})
 
-	socket.on('getDialog', (data) => {
+	socket.on('getDialog', (data) => {	
 		Friend.find({'_id' : { $in : data.contacts }}).then((friends) => {
 		socketio.emit('dialogs',  friends)
 	})
-})
+	}
+)
 	socket.on('disconnect', (socket) =>{
 		console.log("disconnect")
 	})
