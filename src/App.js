@@ -29,7 +29,7 @@ function App() {
   const [search, setSearch] = useState('')
   const [filteredContacts, setFilterContacts] = useState([])
   const [darktheme, setDarkTheme] = useState(false)
-  const [ open , setOpen ] = useState(false)
+  const [open , setOpen] = useState(false)
 
   //TO DO CREATE ICON WHEN MESSAGE IS TYPING
   //useEffect(() => {
@@ -54,6 +54,18 @@ useEffect(() => {
     fetch()        
   }, [])
 
+  useEffect(() => {
+
+      if(mainUser || mainUser !== undefined){
+        socket.emit('ehlo', mainUser.number)
+      }
+
+  },[mainUser, setMainUser])
+
+  socket.on('seen', () => {
+          socket.emit('getDialogs', { contacts : data })
+  }) 
+
   //each time contactSelected, data, search is changing
   useEffect(() => {
     const curContact = data.find((d) => d._id === contactSelected._id)
@@ -62,8 +74,8 @@ useEffect(() => {
   }, [contactSelected, data, search])
 
    async function getDialogs(){
-    socket.emit('getDialog', { contacts : mainUser.friends })
-     socket.on('dialogs', (friends) => {
+    await socket.emit('getDialog', { contacts : mainUser.friends })
+      socket.on('dialogs', (friends) => {
       setData(friends)
       console.log('render')
   })
@@ -71,7 +83,7 @@ useEffect(() => {
 
   async function pushMessage(){
     socket.emit('messageSend', { from : mainUser, to : contactSelected, message : message })
-    setMessage('')
+    await setMessage('')
     getDialogs()
   }
 

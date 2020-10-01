@@ -415,7 +415,11 @@ main{
     .Main{
     background: #fff;
     height: inherit;
-}
+    }
+    .chats{
+    min-width: 200px;
+    min-height: 100px; 
+    }
     .app{
         display: block;
         height: 100%;

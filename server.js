@@ -203,12 +203,32 @@ app.put('/add', (req, res) =>{
 
 
 ///////////////SOCKET////////////////////
+const Connection = require('./models/Connection')
 
 socketio.on('connection', (socket) =>{
+	const SocketId = socket['id']
 	console.log(socket['id'] + " has connected")
 
+	socket.on('ehlo', (number)=> {
+		//sockets.push({socket['id'] : user] })
+		if(number !== undefined){
+			Connection.findOne({ 'number' : number }).then((user) => {
+				if(user === null){
+					const connection = new Connection({
+						number : number,
+						socketId : SocketId
+					}).save().then((socket) => {
+						console.log(`created connection ${socket}`)
+					})
+				} else { 
+					Connection.findOneAndUpdate({ 'number' : user.number }, { $set : {'socketId' : socket.id } })
+					}
+			})
+
+		}
+	})
 	socket.on('messageSend', (data) => {
-		console.log(data)
+		//console.log(data)
 		const from = data.from
 		const to = data.to
 		const friendfrm = from.number + to.contact.number
@@ -224,16 +244,37 @@ socketio.on('connection', (socket) =>{
 					if(err){
 						console.log(err)
 					}
-					//console.log(result) 
+					Connection.findOne({ 'number' : from.number }).then((user) =>{
+						if(user !== null){
+							console.log(user.socketId)
+							socket.to(user.socketId).emit('seen')
+						}
+					})
+					Connection.findOne({ 'number' : to.number }).then((user) => {
+						if(user !== null){
+							socket.to(user.socketId).emit('seen')
+						}
+					})
 					}))
 			})
 		})	
 	})
 	socket.on('messageSeen', (data) => {
+
 		const friendfrm = data.from + data.to
 		const friendto = data.to + data.from
-		Friend.update({ '_id' : { $in : [ friendfrm, friendto ] }}, { $set : { "messages.$[].seen" : true }}, { multi : true }).then((result) => {
-			socketio.emit('seen')
+		Friend.update({ '_id' : { $in : [ friendfrm, friendto ] }}, { $set : { "messages.$[].seen" : true }}, { multi : true }).then(() => {
+			Connection.findOne({ 'number' : data.to }).then((user) => {
+				if(user !== null){
+					console.log(user.socketId)
+					socketio.to(user.socketId).emit('seen')
+				}
+			})
+			Connection.findOne({ 'number' : data.from }).then((user) => {
+				if(user !== null){
+					socketio.to(user.socketId).emit('seen')
+				}
+			})
 		})
 	})
 
@@ -242,9 +283,10 @@ socketio.on('connection', (socket) =>{
 		socketio.emit('dialogs',  friends)
 	})
 	}
-)
-	socket.on('disconnect', (socket) =>{
-		console.log("disconnect")
+	)
+	socket.on('disconnect', () =>{
+		Connection.remove({ 'socketId' : socket.id }).then((result) => { console.log('disconnect' + result)})
 	})
+
 })
 

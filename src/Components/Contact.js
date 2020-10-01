@@ -8,7 +8,7 @@ function Contact(props){
     const user = props.user
 	const friend = props.friend
 	const messages = props.messages
-    console.log(messages)
+    //console.log(messages)
 	const setContactSelected = props.setContactSelected
 	const minimize = (message,length) => {
 		return message.length > length ? 
@@ -29,9 +29,6 @@ if(messages.length !== 0){
     var toSeen = () =>{
         if(lastMessage.from !== user.number){
         socket.emit("messageSeen", { from : user.number, to : friend.contact.number })
-        socket.on('seen', () => {
-            socket.emit('getDialogs', { contacts : user.friends })
-        })
         }
     }
    
