@@ -26,6 +26,7 @@ function App() {
   const [contactSelected, setContactSelected] = useState({})
   const [currentMessages , setCurrentMessages] = useState([])
   const [message, setMessage] = useState('')
+  const [sending, setSending] = useState(false)
   const [search, setSearch] = useState('')
   const [filteredContacts, setFilterContacts] = useState([])
   const [darktheme, setDarkTheme] = useState(false)
@@ -51,7 +52,7 @@ useEffect(() => {
             await axios.post('/friends', tokenValid.data.user.friends)
             .then((res) => setData(res.data))
     }
-    fetch()        
+    fetch()         
   }, [])
 
   useEffect(() => {
@@ -59,12 +60,10 @@ useEffect(() => {
       if(mainUser || mainUser !== undefined){
         socket.emit('ehlo', mainUser.number)
       }
-
+      //if(sending === true){
+        //setSending(false)
+      //}
   },[mainUser, setMainUser])
-
-  socket.on('seen', () => {
-          socket.emit('getDialogs', { contacts : data })
-  }) 
 
   //each time contactSelected, data, search is changing
   useEffect(() => {
@@ -73,23 +72,11 @@ useEffect(() => {
     filterContacts(data, search)
   }, [contactSelected, data, search])
 
-   async function getDialogs(){
-    await socket.emit('getDialog', { contacts : mainUser.friends })
-      socket.on('dialogs', (friends) => {
-      setData(friends)
-      console.log('render')
-  })
-  }
-
-  async function pushMessage(){
-    socket.emit('messageSend', { from : mainUser, to : contactSelected, message : message })
-    await setMessage('')
-    getDialogs()
-  }
-
   async function onMain(){
     setContactSelected({})
   }
+    
+
   const onHam = () => {
     if(open){ setOpen(false)} else { setOpen(true) }
   }
@@ -104,8 +91,30 @@ useEffect(() => {
   }
 
     if(mainUser || mainUser !== undefined){
-          history.push('/')               
+          history.push('/')
+
+      socket.on('seen', (seen) => {
+      console.log('seen')
+        })
+
+  async function getDialogs(){
+    await socket.emit('getDialog', { contacts : mainUser.friends })
+    await socket.on('dialogs', (friends) => {
+      setData(friends)
+      setSending(false)
+      console.log('render')
+  })
+}
+  async function pushMessage(){
+    socket.emit('messageSend', { from : mainUser, to : contactSelected, message : message })
+    await setMessage('')
+    await setSending(true)
+    getDialogs()
+  }
+
+
     return (
+
         <div className="app">
         <Hamburger onShow={onHam} 
                 open={open} />
@@ -123,7 +132,8 @@ useEffect(() => {
                         darktheme={darktheme}
                         setDarkTheme={setDarkTheme}/>
             <Dialog mainUser = {mainUser}  messages={currentMessages}/>
-            <MessageInput message={message}
+            <MessageInput sending={sending}
+                          message={message}
                           setMessage={setMessage}
                           pushMessage={pushMessage}/>
         </main>

@@ -11,8 +11,8 @@ import Avatar from '@material-ui/core/Avatar';
 import { Link } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import axios from 'axios'
-
+import axios from 'axios';
+import './Components/Loading.css'
 
 function Alert(props) {
   return <MuiAlert elevation={6} 
@@ -28,7 +28,9 @@ function Register(){
 	const [number, setNumber] = useState('')
 	const [snackbar , setSnackbar] = useState(false)
 	const [success , setSuccess] = useState(false)
-	const [ message , setMessage ] = useState('')
+	const [message , setMessage ] = useState('')
+	const [loading , setLoading ] = useState(false)
+
 	const imageChange = (event) =>{
 		const reader = new FileReader();
 		reader.onload = () => {
@@ -60,6 +62,7 @@ function Register(){
   };
 
 	const Submit = async (event) => {
+		setLoading(true)
 		event.preventDefault();
 		const data = new FormData()
 		data.append('name', name)
@@ -69,19 +72,34 @@ function Register(){
 			const res = await axios.post('/registration',
 										 data, { headers:{
 										 	'Content-Type' : 'multipart/form-data' }
-					}).then((response) => { 
+					}).then((response) => {
+						setLoading(false) 
 						setSnackbar(true)
 						setSuccess(response.data.success)
 						setMessage(response.data.message)
 					})
 		} catch (error) {if(error.response.status === 500){
+			setLoading(false)
 			console.log('errors on server side')	
 		} else {
+			setLoading(false)
 			console.log(error.response.data)
 		}
 	}}
 	return (
 		<ThemeProvider>
+		{loading ? (
+				<div id="fountainG">
+				<div id="fountainG_1" class="fountainG"></div>
+				<div id="fountainG_2" class="fountainG"></div>
+				<div id="fountainG_3" class="fountainG"></div>
+				<div id="fountainG_4" class="fountainG"></div>
+				<div id="fountainG_5" class="fountainG"></div>
+				<div id="fountainG_6" class="fountainG"></div>
+				<div id="fountainG_7" class="fountainG"></div>
+				<div id="fountainG_8" class="fountainG"></div>
+				</div>
+			) : (
 			<Dialog open 
 					fullWidth 
 					maxWidth='sm'>
@@ -108,7 +126,7 @@ function Register(){
 				</Snackbar>)
 			  	}
 			<br/>
-				<form enctype="multipart/form-data"
+				<form encType="multipart/form-data"
 					  style={{ margin : 'auto' }}>
 					<Avatar style={{ margin : 'auto',
 									height : '100px', width : '100px'}} 
@@ -161,7 +179,11 @@ function Register(){
 				</form>
 			<br/>
 			</Dialog>
+			)}
+			
 		</ThemeProvider>
 	)
 }
 export default Register
+
+///https://icons8.com/cssload

@@ -3,6 +3,7 @@ import UserContext from '../UserContext'
 import {useContext} from 'react'
 import Message from './Message'
 
+
 function Dialog(props){
 	
 	//const messages = useContext(UserContext)

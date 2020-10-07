@@ -3,12 +3,15 @@ import React, {useState, useEffect} from 'react'
 import SendButton from './SendButton'
 import { Twemoji } from "react-emoji-render"
 import Emojis from './Emojis'
+import './Loading.css'
 
 function MessageInput(props){
 
 	const message = props.message
   const setMessage = props.setMessage
   const pushMessage = props.pushMessage
+  const sending = props.sending
+
   const [openEmoji, setOpenEmoji] = useState(false)
   //each time input has changed, setMessage
 	const Change = (event) =>{
@@ -56,6 +59,19 @@ function MessageInput(props){
                     </div>
        			<SendButton pushMessage={pushMessage}
                          message={message} />
+                        { sending ? (
+                             <div id="floatingBarsG">
+                          <div class="blockG" id="rotateG_01"></div>
+                          <div class="blockG" id="rotateG_02"></div>
+                          <div class="blockG" id="rotateG_03"></div>
+                          <div class="blockG" id="rotateG_04"></div>
+                          <div class="blockG" id="rotateG_05"></div>
+                          <div class="blockG" id="rotateG_06"></div>
+                          <div class="blockG" id="rotateG_07"></div>
+                          <div class="blockG" id="rotateG_08"></div>
+                        </div>
+                          ) : (<div></div>)}
+
           </div>
 		)
 }

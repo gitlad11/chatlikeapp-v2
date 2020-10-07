@@ -67,6 +67,9 @@ main.dark{
     overflow-y: auto;
     flex: 1;
 }
+.contact-boxes.find-contacts{
+    max-height: 600px;
+}
 .contact-box {
     background: #fff;
     border-bottom: 1px solid lightgrey;
@@ -146,8 +149,8 @@ aside header {
 }
 
 .icon {
-    width: 1rem;
-    margin: 0 0.5rem;
+    width: 0.70rem;
+    margin: 0 0.3rem;
     cursor: pointer;
 }
 #statusIcon {
@@ -173,7 +176,7 @@ input:focus {
     text-align: center;
 }
 .chat-input {
-    width: 92%;
+    width: 90%;
 
 }
 .send {
@@ -264,9 +267,9 @@ input:focus {
     background-image: url('./Components/Images/icons8-emoji-24.png');
 } 
 .send-btn{
-    margin-right: 10px;
-    height: 24px;
-    width: 24px;
+    margin-right: 2px;
+    height: 22px;
+    width: 22px;
     background-image: url('./Components/Images/icons8-send.png');
     background-size: 100% 100%;
     border: none;
@@ -357,6 +360,7 @@ box-shadow:         3px 3px 12px 0px rgba(50, 53, 50, 0.53);
 .Input{
     box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
+
 @media (max-width: 800px) and (max-height: 900px){
 aside{
     width: 40%;
@@ -392,7 +396,9 @@ main{
     min-height: 40vh;
     max-height: 100vh;
 }
-
+.chat-input {
+    width: 85%;
+}
 }
 @media (max-width: 460px) and (max-height: 900px){
     aside{

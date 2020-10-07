@@ -15,7 +15,7 @@ function AddItem(props){
 	}
 	return (
 		<div style={{ justifyContent : "space-between" }} className='contact-box'>
-				<Avatar style={{ fontSize: '60px',width: '60px',height: '60px',}} src={contact.avatar}/>
+				<Avatar style={{  width: '70px',height: '70px',}} src={contact.avatar}/>
 				<div style={{ "margin" : "auto", display : "flex", flexDirection : "column" }}>
 					{ contact.name.length > 0 ? (
 						<h3 className='avatar-title'>{contact.name}</h3>

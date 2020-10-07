@@ -10,20 +10,36 @@ const jwt = require('jsonwebtoken')
 const faker = require('faker')
 const moment = require('moment')
 const config = require('./config')
-
-
+const { CloudinaryStorage } = require('multer-storage-cloudinary')
+const cloudinary = require('cloudinary').v2
 
 const app = express()
 const server = http.Server(app)
 const socketio = io(server)
 
 
-var imgStorage = multer.diskStorage({
-	destination : (req, file, callback) =>{
-		callback(null , 'avatars')
+//var imgStorage = multer.diskStorage({
+	//destination : (req, file, callback) =>{
+		//callback(null , 'avatars')
+	//},
+	//filename : (req, file, callback) => {
+		//callback(null , file.fieldname + '-' + Date.now())
+	//}
+//})
+
+//please don't use my cloud XD
+cloudinary.config({
+	cloud_name : config.CLN,
+	api_key : config.CLK,
+	api_secret : config.CLS
+})
+const Storage = new CloudinaryStorage({
+	cloudinary : cloudinary,
+	params : {
+		folder : 'samples'
 	},
 	filename : (req, file, callback) => {
-		callback(null , file.fieldname + '-' + Date.now())
+		callback(null, file.fieldname + '-' + Date.now())
 	}
 })
 
@@ -40,7 +56,7 @@ multer({
   limits: { fieldSize: 25 * 1024 * 1024 }
 })
 
-var imgHandler = multer({ storage : imgStorage, fileFilter : imgFilter })
+var imgHandler = multer({ storage : Storage, fileFilter : imgFilter })
 
 const MongoURI = config.DB_URI
 const PORT = process.env.PORT || 3004
@@ -93,7 +109,7 @@ app.post('/registration', imgHandler.single('file'), async (req, res) => {
 		var contact = new Contact({
 			name : req.body.name,
 			number : req.body.number,
-			avatar : req.file.filename,
+			avatar : req.file.path,
 			}) 
 	} else {
 		var contact = new Contact({
@@ -285,8 +301,7 @@ socketio.on('connection', (socket) =>{
 	}
 	)
 	socket.on('disconnect', () =>{
-		Connection.remove({ 'socketId' : socket.id }).then((result) => { console.log('disconnect' + result)})
+		Connection.deleteOne({ 'socketId' : socket.id }).then((result) => { console.log('disconnect ' + result)})
 	})
 
 })
-
