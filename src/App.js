@@ -44,12 +44,12 @@ useEffect(() => {
       localStorage.setItem("auth-token", "")
       token = ""
     }
-    const tokenValid = await axios.post('/authenticate',
+    const tokenValid = await axios.post('http://localhost:3004/authenticate',
             null, { headers : 
               { "x-auth-token" : token } 
             })
             await setMainUser(tokenValid.data.user)
-            await axios.post('/friends', tokenValid.data.user.friends)
+            await axios.post('http://localhost:3004/friends', tokenValid.data.user.friends)
             .then((res) => setData(res.data))
     }
     fetch()         

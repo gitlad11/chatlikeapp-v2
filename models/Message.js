@@ -19,5 +19,8 @@ var messageSchema = new Schema({
 	date : { 
 		type : Date
 	},
+	sent_from : {
+		type : String 
+	}
 })
 module.exports = mongoose.model('Message' , messageSchema)

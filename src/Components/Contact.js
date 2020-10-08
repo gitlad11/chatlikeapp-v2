@@ -41,7 +41,7 @@ if(messages.length !== 0){
                                     <h3 className="avatar-title">{friend.contact.name}</h3>
                                     ) : ( <h3 className="avatar-title">{friend.contact.number}</h3> )
                                 }                          	
-                                <span className="time-mark">{lastMessage.date}</span>
+                                <span className="time-mark">{lastMessage.sent_from}</span>
                             </div>
                             <div className="last-msg">
                             	{ lastMessage.seen == true ? (

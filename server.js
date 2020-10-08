@@ -29,9 +29,9 @@ const socketio = io(server)
 
 //please don't use my cloud XD
 cloudinary.config({
-	cloud_name : config.CLN,
-	api_key : config.CLK,
-	api_secret : config.CLS
+	cloud_name : config.CLN || process.env.CLOUD_NAME,
+	api_key : config.CLK || process.env.CLOUD_KEY,
+	api_secret : config.CLS || process.env.CLOUD_SECRET
 })
 const Storage = new CloudinaryStorage({
 	cloudinary : cloudinary,
@@ -58,7 +58,7 @@ multer({
 
 var imgHandler = multer({ storage : Storage, fileFilter : imgFilter })
 
-const MongoURI = config.DB_URI
+const MongoURI = config.DB_URI || process.env.DATABASE_URL
 const PORT = process.env.PORT || 3004
 
 if(process.env.NODE_ENV === 'production'){
@@ -79,7 +79,7 @@ mongoose.connect(MongoURI,
 server.listen(PORT, console.log(`server is running on ${PORT}`))
 
 app.use(cors({
-	origin : "http://localhost:3000" || config.URI,
+	origin : "http://localhost:3000" || process.env.URL ,
 	credentials : true
 }))
 app.use(express.json())
@@ -253,7 +253,8 @@ socketio.on('connection', (socket) =>{
 			'msg' : data.message,
 			'from' : from.number,
 			'to' : to.contact.number,
-			'date' : moment().format('M D h:mm ')
+			'date' : moment().format(),
+			'sent_from' : moment().format('MMMM Do YYYY, h:mm:ss a')
 		}).save().then((message) => {
 			Friend.find({ '_id' : { $in : [friendfrm, friendto] } }).then((friends) => {
 				friends.forEach((friend) => friend.update({ $push : { 'messages' : message } }, (err) => { 
