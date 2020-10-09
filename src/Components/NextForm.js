@@ -7,27 +7,29 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import Recaptcha from 'react-recaptcha'
+import ReCAPTCHA from 'react-google-recaptcha';
+
+
 
 
 class NextForm extends React.Component{
 	constructor(props){
 		super(props)
-		this.recaptchaLoaded = this.recaptchaLoaded.bind(this)
 		this.verifyCallback = this.verifyCallback.bind(this)
+		this.erroredCallback = this.erroredCallback.bind(this)
 	}
 
 	back = event => {
 		event.preventDefault()
 		this.props.prevStep()
 	}
-	recaptchaLoaded(){
-		console.log('recaptcha loaded')
-	}
 	verifyCallback(response){
 		if(response){
 			this.props.setVerify(true)
 		}
+	}
+	erroredCallback(error){
+		console.log(error)
 	}
 
 	render(){
@@ -45,14 +47,14 @@ class NextForm extends React.Component{
 						</Toolbar>
 				</AppBar>		
 				<br/>
-				<div style={{margin : 'auto'}}>		
-					<Recaptcha
-    					sitekey="6Ld9Y9UZAAAAABgqhHKBBVDcHkoMr-x5y2YePl8V"
-    					render="explicit"
-    					verifyCallback={this.verifyCallback}
-    					onloadCallback={this.recaptchaLoaded}
-    					theme="dark"
-  						/>
+				<div style={{margin : 'auto'}}>
+
+					<ReCAPTCHA
+						sitekey="6LfSbNUZAAAAAH52ZEnh0II-hryPI9k2NlQrRU8A"
+						onChange={this.verifyCallback}
+						onErrored={this.erroredCallback}
+					/>
+
   				</div>	
   				<br/>		
 					<Button color="primary"
