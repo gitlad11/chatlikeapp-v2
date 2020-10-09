@@ -14,7 +14,7 @@ function Main(props){
 	const addChange = (event) => {
 		setQuery(event.target.value)
 		const data = { query : query }
-		const result = axios.post('http://localhost:3004/contacts', data)
+		const result = axios.post('/contacts', data)
 			.then((result) => setSearchR(result.data))
 			.catch((error) => console.log(error))
 		//console.log(searchR)

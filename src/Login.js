@@ -22,7 +22,7 @@ function Login(){
 		event.preventDefault()
 		const data = { 'name' : name, 'number' : number }
 		if(verify){
-			const res = axios.post('http://localhost:3004/login', 
+			const res = axios.post('/login', 
 			data, { headers : {"Content-Type" : "application/json"}
 		}).then((response) => { 
 			setError(response.data.error)
