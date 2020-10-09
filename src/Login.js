@@ -10,6 +10,7 @@ function Login(){
 	const [number, setNumber] = useState('')
 	const [error , setError] = useState(false)
 	const [message, setMessage] = useState('')
+	const [verify, setVerify] = useState(false)
 
 	const nextStep = () =>{
 		setStep(step + 1)
@@ -20,7 +21,8 @@ function Login(){
 	const submit = (event) =>{
 		event.preventDefault()
 		const data = { 'name' : name, 'number' : number }
-		const res = axios.post('http://localhost:3004/login', 
+		if(verify){
+			const res = axios.post('http://localhost:3004/login', 
 			data, { headers : {"Content-Type" : "application/json"}
 		}).then((response) => { 
 			setError(response.data.error)
@@ -32,6 +34,10 @@ function Login(){
 				window.location.reload()
 			} 
 		})
+		} else { 
+			setError(true)
+			setMessage('You have to verify yourself!')
+		}
 	}
 	const nameChange = (event) =>{
 		setName(event.target.value)
@@ -53,7 +59,8 @@ function Login(){
 	case 2:
 	return (
 
-			<NextForm prevStep={prevStep}
+			<NextForm 	setVerify={setVerify}
+						prevStep={prevStep}
 						error={error}
 						message={message}
 						submit={submit}/>
