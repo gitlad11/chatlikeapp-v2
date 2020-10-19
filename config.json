@@ -1,11 +1,4 @@
 {
 	"URL" :  "https://vert-chat.herokuapp.com",
-	"DB_URI" : "mongodb+srv://admin:GoodMongodb@cluster0.pcwin.gcp.mongodb.net/chat?retryWrites=true&w=majority",
-	"CLN" : "du8f2setm",
-	"CLK" : "777743622976836",
-	"CLS" : "HbCcdIqkm0TlaICaYpEK8ly5XQ8",
-	"TWT" : "NmrLgLnXDA5GjyL8qSvX-Hfqntu0r6gtVGtGqL5j",
-	"CAPK" : "6Ld9Y9UZAAAAABgqhHKBBVDcHkoMr-x5y2YePl8V ",
-	"CAPS" : "6Ld9Y9UZAAAAAKA8fUE-a39iZxpavORhWmvpx6KJ"
 
 }
